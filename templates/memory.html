@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if room %}Memory — {{ room['name'] }} — {{ room['subject'] }} — SyllabiIQ{% else %}Memory — SyllabiIQ{% endif %}</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #07090F; --surface: #0D1421; --surface-2: #13203A;
+      --border: #1C2E48; --accent: #5B6EF5; --accent-dim: rgba(91,110,245,0.12);
+      --green: #22C55E; --text: #E8EDF5; --muted: #64748B; --dim: #94A3B8;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+
+    /* ── Topbar ── */
+    .topbar {
+      padding: 14px 44px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 18px;
+      background: rgba(7,9,15,0.9); backdrop-filter: blur(14px);
+      position: sticky; top: 0; z-index: 20;
+    }
+    .back-link {
+      color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 500;
+      display: flex; align-items: center; gap: 5px; transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+    .tb-sep { color: var(--border); }
+    .tb-info { flex: 1; display: flex; align-items: center; gap: 10px; }
+    .tb-chapter { font-size: 15px; font-weight: 700; }
+    .tb-subject { font-size: 11px; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+    .tbtn {
+      padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--dim); font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 5px;
+      transition: all 0.18s; font-family: inherit;
+    }
+    .tbtn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── Tab nav ── */
+    .tab-nav {
+      padding: 0 44px; border-bottom: 1px solid var(--border);
+      display: flex; gap: 2px; background: var(--bg);
+      position: sticky; top: 57px; z-index: 10;
+    }
+    .tab-btn {
+      padding: 14px 20px; background: transparent; border: none; border-bottom: 2px solid transparent;
+      color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer;
+      font-family: inherit; transition: all 0.18s; display: flex; align-items: center; gap: 6px;
+      margin-bottom: -1px;
+    }
+    .tab-btn:hover { color: var(--dim); }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── Content ── */
+    .content { max-width: 980px; margin: 0 auto; padding: 40px 44px 72px; }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Shared section title ── */
+    .sec-title { font-size: 13px; font-weight: 700; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; }
+
+    /* ── Tab 1: Uploaded PDFs ── */
+    .file-list { display: flex; flex-direction: column; gap: 10px; }
+    .file-row {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+      padding: 18px 22px; display: flex; align-items: center; gap: 18px;
+      transition: border-color 0.18s;
+    }
+    .file-row:hover { border-color: var(--accent); }
+    .file-icon { font-size: 28px; flex-shrink: 0; }
+    .file-info { flex: 1; }
+    .file-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+    .file-meta { font-size: 12px; color: var(--muted); }
+    .file-btn {
+      padding: 8px 18px; border-radius: 8px; border: 1px solid var(--border);
+      background: transparent; color: var(--dim); font-size: 13px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: all 0.18s; white-space: nowrap;
+    }
+    .file-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+    /* ── Empty state ── */
+    .empty { text-align: center; padding: 70px 20px; color: var(--muted); }
+    .empty-icon { font-size: 40px; margin-bottom: 14px; }
+    .empty h3 { font-size: 16px; color: var(--dim); margin-bottom: 8px; }
+    .empty p { font-size: 13px; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+<!-- Topbar -->
+<div class="topbar">
+  <a href="/chat{% if room %}?room={{ room['id'] }}{% endif %}" class="back-link">← Back to Chat</a>
+  <span class="tb-sep">|</span>
+  <div class="tb-info">
+    <span class="tb-chapter">{% if room %}{{ room['name'] }}{% else %}Chapter{% endif %}</span>
+    <span class="tb-subject">{% if room %}{{ room['subject'] }}{% else %}Subject{% endif %}</span>
+  </div>
+  
+</div>
+
+<!-- Tab navigation -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="show('pdfs',    this)">📄 Uploaded PDFs</button>
+</div>
+
+<!-- Content -->
+<div class="content">
+
+  <!-- ── Tab 1: Uploaded PDFs ── -->
+  <div class="tab-panel active" id="tab-pdfs">
+  <div class="sec-title">Uploaded PDFs</div>
+  <div class="file-list">
+    {% if resources %}
+      {% for resource in resources %}
+        <div class="file-row">
+          <div class="file-icon">📄</div>
+          <div class="file-info">
+            <div class="file-name">{{ resource['file_name'] }}</div>
+            <div class="file-meta">{{ resource['file_path'] }}</div>
+          </div>
+          <button
+            class="file-btn"
+            onclick="viewPDF({{ room['id'] }}, '{{ resource['file_name'] }}')">
+            View
+          </button>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty">
+        <div class="empty-icon">📭</div>
+        <h3>No PDFs uploaded yet</h3>
+        <p>Upload a PDF from the chat or generate page to see it here.</p>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  function show(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function flip(el) { el.classList.toggle('flipped'); }
+  
+  function viewPDF(roomId, filename) {
+    const url = `/uploads/room_${roomId}/${encodeURIComponent(filename)}`;
+    window.open(url, '_blank');
+  }
+
+</script>
+</body>
+</html>

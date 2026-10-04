@@ -1,0 +1,8 @@
+Flask
+fitz
+Pillow
+ollama
+chromadb
+Werkzeug
+sqlite3
+pathlib
