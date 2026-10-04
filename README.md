@@ -9,9 +9,9 @@ Create a room for a chapter, upload your PDFs, and chat with an AI that answers 
 ![Ollama](https://img.shields.io/badge/Ollama-local%20LLMs-black)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-
+![Home](https://raw.githubusercontent.com/AdvaySingh-9/SyllabiIQ/refs/heads/main/sample%20images/home.png)
 ![Chat](https://raw.githubusercontent.com/AdvaySingh-9/SyllabiIQ/refs/heads/main/sample%20images/chat.png)
-
+![Memory](https://raw.githubusercontent.com/AdvaySingh-9/SyllabiIQ/refs/heads/main/sample%20images/memory.png)
 ---
 
 ## Why this project
