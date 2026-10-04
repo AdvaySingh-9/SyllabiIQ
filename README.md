@@ -137,7 +137,7 @@ ollama pull nomic-embed-text
 ### Run
 
 ```bash
-Press F5 or click on run button.
+python main.py
 ```
 
 Open **http://127.0.0.1:7860** in your browser.
