@@ -10,7 +10,7 @@ Create a room for a chapter, upload your PDFs, and chat with an AI that answers 
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 
-![Chat](sample images/chat.png)
+![Chat](https://raw.githubusercontent.com/AdvaySingh-9/SyllabiIQ/refs/heads/main/sample%20images/chat.png)
 
 ---
 
