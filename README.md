@@ -5,7 +5,7 @@
 Create a room for a chapter, upload your PDFs, and chat with an AI that answers only from that chapter. Everything runs locally on your machine through [Ollama](https://ollama.com), so there are no API keys, no cloud uploads and no internet needed after setup.
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-009688)
+![Flask](https://img.shields.io/badge/Flask-009688)
 ![Ollama](https://img.shields.io/badge/Ollama-local%20LLMs-black)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
