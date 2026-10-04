@@ -9,8 +9,8 @@ Create a room for a chapter, upload your PDFs, and chat with an AI that answers 
 ![Ollama](https://img.shields.io/badge/Ollama-local%20LLMs-black)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-<!-- Replace with your own screenshots or a demo GIF -->
-<!-- ![Demo](docs/demo.gif) -->
+
+![Chat](/sample images/chat.png)
 
 ---
 
